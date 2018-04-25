@@ -62,26 +62,76 @@ class EmailController extends Controller
         // return $jobseekers; 
         return "Emails sent successfully";
 
-
-        
-        // $title = "password Reset";
-        // $content = $url;
-        // $data = array('button' => $content);
-        
-
-        // $beautymail->send('email.email', $data, function($message) use($data)
-
-        // {
-
-        //     $message
-        //         ->from('noreplay@astrosoft.tk')
-        //         ->to('pasupathi022@gmail.com', 'John Smith')
-        //         ->subject('Welcome!');
-
-        // });
-
-        //     $I =1;
-
-        //     RETURN $I;
     }
+
+
+    
+    public function autoEmail2newstudents()
+    {
+    
+        if (Auth::user()->role_id != 1) {
+            return 'You are not ADMIN';
+        }
+        
+    
+        $name='';
+        $email='';
+        // 
+        $collegestudents = DB::table('collegestudents')
+        ->whereNotNull('email')
+        // ->where('id',139)
+        ->select('name','email')->get();
+
+        $beautymail = app(Beautymail::class);
+        foreach ($collegestudents as $collegestudent) {
+            $name = $collegestudent->name;
+            $beautymail->send('emails.asdp4newstudents', ['name'=>$name], function($message)use ($collegestudent)
+            {
+                $message
+                    ->from('info@ameyem.com')
+                    
+                    ->to($collegestudent->email, $collegestudent->name)
+                    ->subject('Presentation (Shape Your Career) & Free Web Development Course at Ameyem Skill Labs');
+            });
+        }
+        // return $collegestudents; 
+        return "Emails sent successfully";
+
+    }
+
+    public function autoEmail2users()
+    {
+    
+        if (Auth::user()->role_id != 1) {
+            return 'You are not ADMIN';
+        }
+        
+    
+        $name='';
+        $email='';
+        // 
+        $users = DB::table('users')
+        ->whereNotNull('email')
+        // ->where('id',1)
+        ->select('first_name as name','email')->get();
+
+        $beautymail = app(Beautymail::class);
+        foreach ($users as $user) {
+            $name = $user->name;
+            $beautymail->send('emails.existingusers', ['name'=>$name], function($message)use ($user)
+            {
+                $message
+                    ->from('info@ameyem.com')
+                    
+                    ->to($user->email, $user->name)
+                    ->subject('100 Ameyem Coins and Free Web Development Course at Ameyem Skill Labs');
+            });
+        }
+        // return $users; 
+        return "Emails sent successfully";
+
+    }
+
+    
+
 }

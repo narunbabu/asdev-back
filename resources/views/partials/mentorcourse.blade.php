@@ -44,13 +44,17 @@
                     </div>
 
                     {{--course cover--}}
-                    @if($course->id==0))
+                    @if($course->id==0)
                     <div class="form-group">
                         <label for="name">cover image</label>
                         <input type="file" class="form-control" name="cover" id="cover" required>
                     </div>
                     @endif
                     {{--sumbit button--}}
+                    <div class="form-group">
+                        <label for="name">Cost</label>
+                        <input type="text" class="form-control" name="cost" id="cost" value="{{$course->cost}}" required> Ameyem Coins
+                    </div>
                     <input type="submit" class="btn btn-primary " id="submit_btn" style="float: left" value="Submit course" required>
 
                    

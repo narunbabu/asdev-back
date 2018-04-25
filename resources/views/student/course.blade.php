@@ -72,7 +72,9 @@ function makeColor(){
 
     <?php $count = 0  ?>
     <?php $id= he($course->id)?>
+    <a  class="btn btn-primary" href="{{ URL::previous()}}">Back</a>
     <div class="cover">
+    
         <div class="panel panel-success transparent">                       
                         <div class=" panel-heading">
                         <h2 class="text-center  text-uppercase">{{$course->name}}</h2>                          
@@ -95,40 +97,82 @@ function makeColor(){
             <hr>
 
             <div class="panel-group">
-                @foreach($course->chapter as $chapter)
+            <?php $next_enable=true; ?>
+                   @foreach($course->chapter as $chapter)
+
+                       
+
                     <?php $tcount = 0 ?>
                     <?php $chapter_id = he($chapter->id) ?>
                     <div class="panel panel-default chapter">
                         <p class="label label-chapter"> Chapter{{$count+=1}}</p>
                         @foreach($chapter->tasks as $task)
-                            {{--  <p class="label label-success"> {{$task}}</p>  --}}
+                            <!-- {{--  <p class="label label-success"> {{$task}}</p>  --}} -->
                             <p class="label label-success"> Task{{$tcount+=1}}</p>
                         @endforeach
+                        @if($chapter->status[0])
+                        <p class="label  label-danger pull-right">Earned: <b>{{$chapter->status[1] +$chapter->status[2] }}</b>
+                        ({{$chapter->status[1]}} &amp; {{$chapter->status[2]}}) Credits</a>
+                        @elseif($next_enable)
+                        <p class="label  label-danger pull-right">Earned: <b> {{$user_credits}}</b> Credits</a>
+                        @endif
                         <h2 class="text-center">
-                           {{$chapter->id}}: {{$chapter->name}}
+                         {{$chapter->name}}
                         </h2>
                         <p class="text-justify"><b>Instructions: </b>{{$chapter->instructions}}</p>
 
                         <div class="panel-body">
                             <div class="btn-group inline pull-centre">
                             
-                             @if(count($chapter->quiz)>0)
-                                <a href="{{ route('viewQuiz',['id'=>he($chapter->id)]) }}" class="button btn btn-quiz" >Quiz</a>
-                              @endif
-                                <a href="{{route('viewChapter',['course_id'=>$id,'id'=>$chapter_id])}}" class="button btn btn-preview"> view chapter </a>
+                            
 
-                              
+                            @if($chapter->status[0])
+                            <!-- {{$chapter->quizstatus}} -->
+                                <a href="{{route('viewChapter',['course_id'=>$id,'id'=>$chapter_id])}}" class="button btn btn-danger"> Completed </a>
+                                @if((count($chapter->quiz)>0))
+                                <a href="{{ route('viewQuizResult',['id'=>he($chapter->id)]) }}" class="button btn btn-quiz" >Quiz Result</a>
+                                {{-- {{ route('viewQuizResult',['id'=>he($chapter->id)]) }} --}}
+                                 @endif
+                                @else
+                                    @if($next_enable) 
+                                        <a href="{{route('viewChapter',['course_id'=>$id,'id'=>$chapter_id])}}" class="button btn btn-preview"> view chapter </a>
+                                        @if(count($chapter->quiz)>0 && $quiztobeopened )
+                                         <a id="FormQuiz" href="{{ route('viewQuiz',['id'=>he($chapter->id)]) }}" class="button btn btn-quiz" >Quiz</a>
+                                
+                                
+                                        @endif
+                                        <?php $next_enable=false; ?>
+                                    @else
+                                        <a href="#" class="button btn btn-info"> Finish Previous chapter to enable this chapter </a>
+                                    @endif
+                            @endif
+                            
 
                             </div>
-                            {{--  <div class="btn-group inline pull-left">
+                            <!-- {{--  <div class="btn-group inline pull-left">
                                 <a href="#" class="button btn btn-danger pull-left">Delete</a>
-                            </div>  --}}
+                            </div>  --}} -->
                         </div>
                     </div>
+                
                 @endforeach
             </div>
         </div>
     </div>
+      <script>
+     $("#FormQuiz").click(function (event) {
+                 var x = confirm(`Are you sure you want to enter quiz? There is no second try and you need to submit in prescribed time... or it will be auto submitted`);
+                    if (x) {
+                        return true;
+                    }
+                    else {
+
+                        event.preventDefault();
+                        return false;
+                    }
+
+                });
+    </script>
 @endsection
 
 

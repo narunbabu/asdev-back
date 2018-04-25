@@ -42,8 +42,7 @@
 @section('content')
    <div class="container" id="chapter_data">
        <h2 class="text-center">{{$chapter->name}}</h2>
-        <a  class="btn btn-primary"
-                        href="{{ URL::previous()}}">Back</a>
+        <a  class="btn btn-primary" href="{{ URL::previous()}}">Back</a>
                         <hr>
                         <p class="text-justify"><b>Instructions: </b>{{$chapter->instructions}}</p>
         <hr>
@@ -88,6 +87,7 @@
                   <div class="card-footer">
                   <p class="card-text">Use: {{$task->whatinitforme}}</p>
                   <p class="label label-chapter"> Max Credits: {{$task->usercredits}}</p>
+                  
                   {{--  <p class="label label-chapter">{{$task->guidecredits}}</p>
                   <p class="label label-chapter">{{ $task->reviewercredits}}</p>  --}}
                   {{--  <p class="card-text">Guide: {{$task->gname}}</p>  --}}
@@ -95,13 +95,17 @@
                     @if(isStudent())
                         @if(!isset ( $task->status))
                         <a  class="btn btn-warning"                
-                            href="{{ route('assigntask',['coursetask_id'=>he($task->coursetask_id)]) }}">Attempt</a>
+                            href="{{ route('assigntask',['coursetask_id'=>he($task->coursetask_id),'course_id'=>$chapter->course_id]) }}">Attempt</a>
 
                         @else
+                         
                             @if($task->status!="approved")
-                            <a class="btn btn-primary" href="{{ route('UserTasks.edit',['id'=>$task->assigntask_id]) }}">View Work</a>
+                            
+                            <a class="btn btn-primary" href="{{ route('UserTasks.edit',['id'=>$task->assigntask_id,'course_id'=>he($chapter->course_id)]) }}">View Work</a>
                             @else
-                            <p class="label label-success">Completed</p>
+                            <!-- <p class="label label-success">Completed</p> -->
+                            <p class="label label-danger "> Earned Credits: {{$task->earned_credits}}</p>
+                            <a class="btn btn-success" href="{{ route('UserTasks.edit',['id'=>$task->assigntask_id,'course_id'=>he($chapter->course_id)]) }}">Completed</a>
                             @endif
                         @endif  
                     @endif

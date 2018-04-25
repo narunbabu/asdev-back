@@ -20,6 +20,10 @@
 
     </style>
     @include('partials.chapterCover',['course'=>$course])
+    <div class="pull-left">
+                {{--  <a class="btn btn-success" href="{{ url('/dashboard') }}">Back</a>  --}}
+                <a  class="btn btn-primary" href="{{route('manageCourse',['id'=>he($course->id)]) }}">Back</a>
+            </div>
     <h1 class="text-center">Quiz maker</h1>
     <div class="container" id="quiz_maker">
         <br>
@@ -131,6 +135,7 @@
         </div>
     </div>
     <script src="/js/app.js"></script>
+
     <script>
      $("#FormDeleteTime").click(function (event) {
                  var x = confirm("Are you sure you want to delete?");
@@ -145,4 +150,5 @@
 
                 });
     </script>
+
 @endsection

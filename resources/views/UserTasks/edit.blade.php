@@ -3,6 +3,9 @@
 
 <div class="app">
     <div class="container-fluid">
+
+<a  class="btn btn-primary" href="{{ URL::previous()}}">Back</a>
+
         <div class="row">
         <div class="col-sm-4 col-xs-4 col-md-4 col-lg-4">
 
@@ -87,7 +90,7 @@
                         @elseif($assign_tasks->status === 'approved')
                         <h1>Task Approved</h1>
 
-                         <div class="table-responsive">
+                            <div class="table-responsive">
                                 <table class="table table-striped">
                                     <tr>
                                         <th>User Marks</th>
@@ -103,51 +106,6 @@
 
                                 </table>
                             </div>
-
-
-
-                        
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-sm-4"></div>
-                                    <div class="col-sm-4" style="background-color:lavender;">
-                                    <h3><center>Give Rating To your Teachers</center></h3>
-
-                                    {!! Form::model($assign_tasks, ['method' => 'PATCH','route' => ['UserTasks.update', $assign_tasks->id]]) !!}
-
-
-                                            <div class="col-xs-12 col-sm-12 col-md-12" style="display:none">
-                                                <div class="form-group">
-                                                    <strong>Assigned Task Id:</strong>
-                                                    {!! Form::text('assigntask_id', $assign_tasks->id) !!}
-                                                    
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                <strong>Rate Your Guide Work:</strong>
-                                                    {!!  Form::input('number', 'rating_to_guide', null, ['id' => 'weight', 'class' => 'form-control', 'min' => 1, 'max' => 10]) !!}
-                                                </div>
-                                            </div>
-                                      
-
-
-                                         
-                                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                <strong>Rate Your Reviewer Work:</strong>
-                                                    {!!  Form::input('number', 'rating_to_reviewer', null, ['id' => 'weight', 'class' => 'form-control', 'min' => 1, 'max' => 10]) !!}
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </div>
-                                    </div>
-                            </div>
-                        </div>
-                      
 
 
                         @else
@@ -169,13 +127,21 @@
 
                                     {!! Form::open(array('route' => 'UserTasks.store','method' => 'POST','files' => true)) !!}
 
+                                    @if(isset($course_id))
+                                    <div class="col-xs-12 col-sm-12 col-md-12" style="display:none">
+                                            <div class="form-group">
+                                                       {!! Form::text('course_id', $course_id) !!}
+                                                
+                                            </div>
+                                    </div>
+                                    @endif
 
                                     <div class="col-xs-12 col-sm-12 col-md-12" style="display:none">
                                             <div class="form-group">
                                                 <strong>Assigned Task Id:</strong>
                                                 {!! Form::text('assigntask_id', $assign_tasks->id) !!}
                                                 
-                                        </div>
+                                            </div>
                                     </div>
 
 

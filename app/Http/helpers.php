@@ -7,6 +7,7 @@
     * Generate Hash ids and store them in  a temp variable($hashed_items)
    */
 use Storage as Storage;
+use App\constants;
 function hashMake($collection)
 {
     $collection = $collection->toArray();
@@ -40,6 +41,24 @@ function getTaskIds($chid,$tasks){
         }
     }
     return $taskids;
+
+}
+function getChapterStatus($chid,$statusrows){
+    $valtobereturned=false;
+    foreach ($statusrows as $statusrow){
+        $valtobereturned=false;
+        if(($statusrow->chapter_id == $chid) && ($statusrow->user_id == Auth::user()->id)){
+            if($statusrow->status == 1)  {
+               return [$valtobereturned=true,$statusrow->task_credits,
+               $statusrow->quiz_score*constants::max_credits_each_chapter/100];
+            } 
+            // else{
+            //     $valtobereturned=false;
+            // }    
+            
+        }
+    }   
+    return [$valtobereturned,0,0];
 
 }
 
